@@ -32,45 +32,47 @@ public abstract class Estacionamento {
 		this.valorMensalista = valorMensalista;
 		this.eh24Horas = eh24Horas;
 		this.acessos = new LinkedList<Acesso>();
+		this.eventos = new LinkedList<Evento>();
 	}
 
 	public boolean cadastrarAcesso(Acesso x) {
 		boolean resposta = false;
-		resposta = acessos.add(x);
+		resposta = getAcessos().add(x);
 		return resposta;
+	}
+	public int getTamanhoAcessos() {
+		return acessos.size();
 	}
 	
 	public Acesso pesquisarAcesso(String placa) {
 		String resposta = "";
-		for(Acesso a : acessos) {
+		for(Acesso a : getAcessos()) {
 			if(a.getPlaca().equalsIgnoreCase(placa)) {
-				resposta = "Achou" + placa;
+				resposta = placa + " encontrada";
 				return a;
 			}
 			else {
-				resposta = "N„o achou";
+				resposta = "Placa n√£o encontrada";
 			}
 		}
-		resposta = "N„o achou";
+		resposta = "Placa n√£o encontrada";
 		JOptionPane.showMessageDialog(null, resposta + " " + placa);
 		return null;
 	}
 	
 	public boolean removerAcesso(Acesso x) {
 		boolean resposta = false;
-		if(acessos.contains(x)) {
-			resposta = acessos.remove(x);
+		if(getAcessos().contains(x)) {
+			resposta = getAcessos().remove(x);
 		}
 		return resposta;
 	}
 	
 	public String atualizarAcesso(String placa) {
 		String resposta;
-		for(Acesso a : acessos) {
+		for(Acesso a : getAcessos()) {
 			if(a.getPlaca().equalsIgnoreCase(placa)) {
-				 a.setPlaca(JOptionPane.showInputDialog("Digite a nova placa: "));
-				 a.setDataSaida(JOptionPane.showInputDialog("Digite a nova data de saÌda: "));
-				 a.setHoraSaida(JOptionPane.showInputDialog("Digite a nova hora de saÌda: "));
+				 a.setDataEHoraSaida(JOptionPane.showInputDialog("Digite a nova data e hora de sa√≠da: "));
 				 resposta = "Acesso da placa " + placa + " atualizado";
 			}
 		}
@@ -81,7 +83,7 @@ public abstract class Estacionamento {
 
 	public boolean cadastrarEvento(Evento x){
 		boolean resposta = false;
-		resposta = eventos.add(x);
+		resposta = getEventos().add(x);
 		return resposta;
 	}
 
@@ -89,28 +91,27 @@ public abstract class Estacionamento {
 		String resposta = "";
 		for(Evento a : eventos) {
 			if(a.getNomeEvento().equalsIgnoreCase(nomeEvento)) {
-				resposta = "Achou" + nomeEvento;
+				resposta = nomeEvento + "encontrado";
 				return a;
 			}
 			else {
-				resposta = "N„o achou";
+				resposta = "Evento";
 			}
 		}
-		resposta = "N„o achou";
-		JOptionPane.showMessageDialog(null, resposta + " " + nomeEvento);
+		resposta = "Evento";
+		JOptionPane.showMessageDialog(null, resposta + " " + nomeEvento + "n√£o encontrado");
 		return null;
 	}
 
 	public String atualizarEvento(String nomeEvento){
 		for (Evento x : eventos){
 			if (x.getNomeEvento().equalsIgnoreCase(nomeEvento)) {
-				x.setNomeEvento(JOptionPane.showInputDialog("Digite o novo nome do evento"));
-				x.setDataFim(JOptionPane.showInputDialog("Digite a nova data de finalizaÁ„o do evento"));
-				x.setHoraFim(JOptionPane.showInputDialog("Digite a nova hora de finalizaÁ„o do evento"));
+				x.setNomeEvento(JOptionPane.showInputDialog("Digite o novo nome do evento: "));
+				x.setDataEHoraFim(JOptionPane.showInputDialog("Digite a nova data de finaliza√ß√£o do evento: "));
 				return "Evento atualizado com sucesso";
 			}
 		}
-		return "Evento n„o encontrado";
+		return "Evento n√£o encontrado";
 	}
 	
 	public String deletarEvento(String nomeEvento){
@@ -120,7 +121,7 @@ public abstract class Estacionamento {
 				return "Evento deletado";
 			}
 		}
-		return "Evento n„o encontrado";
+		return "Evento n√£o encontrado";
 	}
 	
 	public String relatorioEstacionamentos() {
@@ -130,7 +131,7 @@ public abstract class Estacionamento {
 			eh24 = "Sim";
 		}
 		else {
-			eh24 = "N„o";
+			eh24 = "N√£o";
 		}
 		
 		String resposta = "";
@@ -189,6 +190,14 @@ public abstract class Estacionamento {
 	
 	public float getValorMensalista() {
 		return valorMensalista;
+	}
+
+	public List<Acesso> getAcessos() {
+		return acessos;
+	}
+
+	public List<Evento> getEventos() {
+		return eventos;
 	}
 	
 }

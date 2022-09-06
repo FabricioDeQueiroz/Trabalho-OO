@@ -2,20 +2,17 @@ package gerenciador;
 
 public abstract class Acesso{
 	String placa,
-		   dataEntrada,
-		   dataSaida,
-		   horaEntrada,
-		   horaSaida;
+		   dataEHoraEntrada,
+		   dataEHoraSaida;
 	
 	float valorContratante,
 		  valorAcesso;
+	
 
-	protected Acesso(String placa, String dataEntrada, String dataSaida, String horaEntrada, String horaSaida, float valorContratante, float valorAcesso) {
+	protected Acesso(String placa, String dataEHoraEntrada, String dataEHoraSaida, float valorContratante, float valorAcesso) {
 		this.placa = placa;
-		this.dataEntrada = dataEntrada;
-		this.dataSaida = dataSaida;
-		this.horaEntrada = horaEntrada;
-		this.horaSaida = horaSaida;
+		this.dataEHoraEntrada = dataEHoraEntrada;
+		this.dataEHoraSaida = dataEHoraSaida;
 		this.valorContratante = valorContratante;
 		this.valorAcesso = valorAcesso;
 	}
@@ -35,13 +32,6 @@ public abstract class Acesso{
 		this.placa = placa;
 	}
 
-	public void setDataSaida(String dataSaida) {
-		this.dataSaida = dataSaida;
-	}
-
-	public void setHoraSaida(String horaSaida) {
-		this.horaSaida = horaSaida;
-	}
 
 	public void setValorContratante(float valorContratante) {
 		this.valorContratante = valorContratante;
@@ -51,6 +41,29 @@ public abstract class Acesso{
 		this.valorAcesso = valorAcesso;
 	}
 	
+	public String relatorioAcessos() {
+		String resposta = "";
+		resposta += "Acesso de placa: " + placa + "\n";
+		resposta += "Data e hora de entrada: " + dataEHoraEntrada + "\n";
+		resposta += "Data e hora de saída: " + dataEHoraSaida + "\n";
+
+		return resposta;
+	}
+
+	public String getDataEHoraSaida() {
+		return dataEHoraSaida;
+	}
+
+	public void setDataEHoraSaida(String dataEHoraSaida) {
+		this.dataEHoraSaida = dataEHoraSaida;
+	}
 	
+	//public void determinarTipoAcesso(String placaAcesso, String dataEntradaAcesso, String dataSaidaAcesso, String horaEntradaAcesso, String horaSaidaAcesso, float valorContratanteAcesso, float valorAcessoAcesso, float valorMensalistaAcesso, int ehMensalistaAcesso, int ehEventoAcesso) {
+	//	if (ehMensalistaAcesso == 1) {
+	//		AcessoMensalista a = new AcessoMensalista(placaAcesso, dataEntradaAcesso, dataSaidaAcesso, horaEntradaAcesso, horaSaidaAcesso, valorContratanteAcesso, valorAcessoAcesso, valorMensalistaAcesso, ehMensalistaAcesso);
+	//	}
+	//	Gerenciamento.b.cadastrarAcesso(a);
+	//	
+	//}
 	
 }

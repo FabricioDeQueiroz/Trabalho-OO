@@ -2,17 +2,15 @@ package gerenciador;
 
 public class Evento{
 	String nomeEvento,
-		   dataInicio,
-		   dataFim,
-		   horaInicio,
-		   horaFim;
+		   dataEHoraInicio,
+		   dataEHoraFim;
+	float valorEvento;
 	
-	protected Evento(String nomeEvento, String dataInicio, String dataFim, String horaInicio, String horaFim) {
+	protected Evento(String nomeEvento, String dataEHoraInicio, String dataEHoraFim, float valorEvento) {
 		this.nomeEvento = nomeEvento;
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-		this.horaInicio = horaInicio;
-		this.horaFim = horaFim;
+		this.dataEHoraInicio = dataEHoraInicio;
+		this.dataEHoraFim = dataEHoraFim;
+		this.valorEvento = valorEvento;
 	}
 	
 	public String getNomeEvento() {
@@ -22,10 +20,17 @@ public class Evento{
 	public void setNomeEvento(String nomeEvento) {
 		this.nomeEvento = nomeEvento;
 	}
-	public void setDataFim(String dataFim) {
-		this.dataFim = dataFim;
+	
+	public String relatorioEventos() {
+		String resposta = "";
+		resposta += "Evento: " + nomeEvento + "\n";
+		resposta += "Data e hora de início: " + dataEHoraInicio + "\n";
+		resposta += "Data e hora do término: " + dataEHoraFim + "\n";
+
+		return resposta;
 	}
-	public void setHoraFim(String horaFim) {
-		this.horaFim = horaFim;
+
+	public void setDataEHoraFim(String dataEHoraFim) {
+		this.dataEHoraFim = dataEHoraFim;
 	}
 }

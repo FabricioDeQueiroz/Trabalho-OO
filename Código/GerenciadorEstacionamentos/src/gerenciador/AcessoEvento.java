@@ -3,8 +3,8 @@ package gerenciador;
 public class AcessoEvento extends Acesso{
 	float valorEvento;
 	
-	protected AcessoEvento(String placa, String dataEntrada, String dataSaida, String horaEntrada, String horaSaida, float valorContratante, float valorAcesso, float valorEvento) {
-		super(placa, dataEntrada, dataSaida, horaEntrada, horaSaida, valorContratante, valorAcesso);
+	protected AcessoEvento(String placa, String dataEHoraEntrada, String dataEHoraSaida, float valorContratante, float valorAcesso, float valorEvento) {
+		super(placa, dataEHoraEntrada, dataEHoraSaida, valorContratante, valorAcesso);
 		this.valorEvento = valorEvento;
 	}
 	
@@ -12,4 +12,5 @@ public class AcessoEvento extends Acesso{
 		valorAcesso = valorEvento;
 		return valorAcesso;
 	}
+
 }

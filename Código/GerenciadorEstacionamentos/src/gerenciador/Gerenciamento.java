@@ -7,9 +7,8 @@ import javax.swing.JOptionPane;
 
 public class Gerenciamento {
 	
-	//Cria��o das listas
+	//Criação das listas
 	private static List<Estacionamento> estacionamentos = new LinkedList<Estacionamento>();
-	// essa lista tem que estar aqui mesmo? private static List<Evento> eventos = new LinkedList<Evento>();
 	
 	public static void main(String[] args) {
 		
@@ -26,7 +25,7 @@ public class Gerenciamento {
 																					    + "2: Pesquisar estacionamentos \n"
 																					    + "3: Editar estacionamentos \n"
 																					    + "4: Remover estacionamentos \n"
-																						+ "5: Relat�rio estacionamentos"));
+																						+ "5: Relatório dos estacionamentos"));
 					switch(menuEstacionamento) {
 						case 1: //Criar Estacionamento
 							int cadastrarNovoEstacionamento;
@@ -35,7 +34,7 @@ public class Gerenciamento {
 							int capVagas = Integer.parseInt(JOptionPane.showInputDialog("Digite a capacidade do Estacionamento: "));
 							float valorFrac = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor de 15min do Estacionamento: "));
 							float valorHora = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor de 1h do Estacionamento: "));
-							float valorDiurno = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor diária do Estacionamento: "));
+							float valorDiurno = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor da diária do Estacionamento: "));
 							float valorNoturno = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem extra noturna do Estacionamento: "));
 							float valorMensal = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor da mensalidade do Estacionamento: "));
 							int eh24Horas = JOptionPane.showConfirmDialog(null, "É 24 horas?", "Estacionamentos", JOptionPane.YES_NO_OPTION);
@@ -48,12 +47,12 @@ public class Gerenciamento {
 							JOptionPane.showMessageDialog(null, "Estacionamento 24h cadastrado");
 							}
 							if(eh24Horas != JOptionPane.YES_OPTION) {
-							String horaAbre = JOptionPane.showInputDialog("Digite a hora que o Estacionamento abre: ");
-							String horaFecha = JOptionPane.showInputDialog("Digite a hora que o Estacionamento fecha: ");
+							String horaAbre = JOptionPane.showInputDialog("Digite a hora que o Estacionamento abre (ex: 16:00): ");
+							String horaFecha = JOptionPane.showInputDialog("Digite a hora que o Estacionamento fecha (ex: 22:00): ");
 							EstacionamentoNormal a = new EstacionamentoNormal(nomeEstacionamento, id, capVagas,
 							valorFrac, valorHora, valorDiurno, valorNoturno, valorMensal,  eh24Horas, horaAbre, horaFecha);
 							estacionamentos.add(a); //Estacionamento normal cadastrado
-							JOptionPane.showMessageDialog(null, "Cadastrado Normal");
+							JOptionPane.showMessageDialog(null, "Cadastrado");
 							}
 							
 							//Confirmação para loop de criação de novos estacionamentos
@@ -63,7 +62,7 @@ public class Gerenciamento {
 							break;
 						
 						case 2: //Pesquisar Estacionamento
-							String nomePesq = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
+							String nomePesq = JOptionPane.showInputDialog("Informe o nome do estacionamento que deseja pesquisar: ");
 							pesquisarEstacionamento(nomePesq);
 							Estacionamento f = pesquisarEstacionamento(nomePesq);
 							
@@ -80,13 +79,13 @@ public class Gerenciamento {
 							break;
 						
 						case 4: //Deletar Estacionamento
-							String nomeDel = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
+							String nomeDel = JOptionPane.showInputDialog("Informe o nome do estacionamento que deseja deletar: ");
 							Estacionamento x = pesquisarEstacionamento(nomeDel);
 							JOptionPane.showMessageDialog(null, removerEstacionamento(x));
 							
 							break;
 						
-						case 5: //Relat�rio Estacionamentos
+						case 5: //Relatório dos Estacionamentos
 							String relatoEstacionamentosGeral = "";
 							for (int i = 0; i < estacionamentos.size(); i++) {
 								
@@ -106,23 +105,59 @@ public class Gerenciamento {
 					int menuAcessos = Integer.parseInt(JOptionPane.showInputDialog("1: Criar acessos \n"
 																			     + "2: Pesquisar acessos \n"
 																			     + "3: Editar acessos \n"
-																			     + "4: Remover acessos"));
+																			     + "4: Remover acessos \n"
+																			     + "5: Relatório acessos \n"));
 					switch(menuAcessos) {
 						case 1: //Criar Acesso
 							int cadastrarNovoAcesso;
 							do {
 								String estacionamentoAddAcesso = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
 								Estacionamento b = pesquisarEstacionamento(estacionamentoAddAcesso);
-								String placa = JOptionPane.showInputDialog("Digite a placa do veículo: ");
-								String dataEntrada = JOptionPane.showInputDialog("Digite a data de entrada do veículo: ");
-								String dataSaida = JOptionPane.showInputDialog("Digite a data de saida do veículo: ");
-								String horaEntrada = JOptionPane.showInputDialog("Digite a hora de entrada do veículo: ");
-								String horaSaida = JOptionPane.showInputDialog("Digite a hora de saida do veículo: ");
-								float valorContratante = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem do contratante: "));
-								float valorAcesso = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor de acesso: "));
+								if (b.getTamanhoAcessos() != b.getCapVagas()) {
+									String placa = JOptionPane.showInputDialog("Digite a placa do veículo: ");
+									int ehMensalista = JOptionPane.showConfirmDialog(null, "Informe se o acesso é ou não mensalista");
+									
+									int ehEvento = 1;
+									
+									Evento x = null;
+									if (ehMensalista == 1) {
+										ehEvento = JOptionPane.showConfirmDialog(null, "Informe se o acesso é ou não do tipo evento");
+										if (ehEvento == 0) {
+											String nomeEventoInput = JOptionPane.showInputDialog("Informe o nome do evento: ");
+											x = b.pesquisarEvento(nomeEventoInput);
+										}
+									}
+									
+									float valorAcesso = 0.0F;
+									
+									
+									float valorContratante = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem do contratante: "));
+									
+									
+									if (ehMensalista == 0) {
+										valorAcesso = b.valorMensalista;
+										String dataEHoraEntrada = null;
+										String dataEHoraSaida = null;
+										AcessoMensalista am = new AcessoMensalista(placa, dataEHoraEntrada, dataEHoraSaida, valorContratante, valorAcesso, b.valorMensalista);
+										b.cadastrarAcesso(am);
+									}
+									else if (ehEvento == 0) {
+										valorAcesso = x.valorEvento;
+										String dataEHoraEntrada = x.dataEHoraInicio;
+										String dataEHoraSaida = x.dataEHoraFim;
+										AcessoEvento ae = new AcessoEvento(placa, dataEHoraEntrada, dataEHoraSaida, valorContratante, valorAcesso, x.valorEvento);
+										b.cadastrarAcesso(ae);
+									}
+									else {
+										String dataEHoraEntrada = JOptionPane.showInputDialog("Digite a data e hora de entrada do veículo (formato DD/MM HH:MM): ");
+										String dataEHoraSaida = JOptionPane.showInputDialog("Digite a data e hora de saida do veículo (formato DD/MM HH:MM): ");
+										// lógica do cálculo de valor acesso das outras classes-filhas //
+									}
+								}
+								else {
+									JOptionPane.showMessageDialog(null, "Não há vagas disponíveis neste estacionamento.");
+								}
 								
-								AcessoPadrao x = new AcessoPadrao(placa, dataEntrada, dataSaida, horaEntrada, horaSaida, valorContratante, valorAcesso);
-								b.cadastrarAcesso(x);
 								
 								cadastrarNovoAcesso = JOptionPane.showConfirmDialog(null, "Cadastrar outro Acesso?", estacionamentoAddAcesso, JOptionPane.YES_NO_OPTION);
 							} while(cadastrarNovoAcesso == JOptionPane.YES_OPTION);
@@ -131,9 +166,16 @@ public class Gerenciamento {
 						
 						case 2: //Pesquisar Acesso
 							String estacionamentoPesqAcesso = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
+							pesquisarEstacionamento(estacionamentoPesqAcesso);
 							Estacionamento c = pesquisarEstacionamento(estacionamentoPesqAcesso);
+							
 							String placaPesq = JOptionPane.showInputDialog("Informe a placa do acesso: ");
-							JOptionPane.showMessageDialog(null, c.pesquisarAcesso(placaPesq));
+							c.pesquisarAcesso(placaPesq);
+							Acesso l = c.pesquisarAcesso(placaPesq);
+							
+							String relatoAcesso = "";
+							relatoAcesso = l.relatorioAcessos();
+							JOptionPane.showMessageDialog(null, relatoAcesso);
 							
 							break;
 						
@@ -153,6 +195,19 @@ public class Gerenciamento {
 							JOptionPane.showMessageDialog(null, e.removerAcesso(x));
 							
 							break;
+						
+						case 5: //Relatório dos Acessos
+							String estacionamentoRelAcesso = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
+							Estacionamento j = pesquisarEstacionamento(estacionamentoRelAcesso);
+							
+							String relatoAcessosGeral = "";
+							for (int i = 0; i < j.getAcessos().size(); i++) {
+								
+								relatoAcessosGeral += j.getAcessos().get(i).relatorioAcessos() + "\n";
+							}
+							JOptionPane.showMessageDialog(null, relatoAcessosGeral);
+							
+							break;
 					}
 					break;
 				
@@ -160,21 +215,22 @@ public class Gerenciamento {
 					int menuEventos = Integer.parseInt(JOptionPane.showInputDialog("1: Criar eventos \n"
 																			     + "2: Pesquisar eventos \n"
 																			     + "3: Editar eventos \n"
-																			     + "4: Remover eventos"));
+																			     + "4: Remover eventos \n"
+																			     + "5: Relatório eventos \n"));
 					switch(menuEventos) {
 						case 1: //Criar Evento
 							int cadastrarNovoEvento;
 							do {
 							
-								String estacionamentoAddEvento = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
+								String estacionamentoAddEvento = JOptionPane.showInputDialog("Informe o nome do estacionamento em que deseja criar o evento: ");
 								Estacionamento b = pesquisarEstacionamento(estacionamentoAddEvento);
 								String nomeEvento = JOptionPane.showInputDialog("Digite o nome do evento: ");
-								String dataInicio = JOptionPane.showInputDialog("Digite a data de início do evento: ");
-								String dataFim = JOptionPane.showInputDialog("Digite a data de finalização do evento: ");
-								String horaInicio = JOptionPane.showInputDialog("Digite a hora de início do evento: ");
-								String horaFim = JOptionPane.showInputDialog("Digite a hora de finalização do evento: ");
-								Evento x = new Evento(nomeEvento, dataInicio, dataFim, horaInicio, horaFim);
+								String dataEHoraInicio = JOptionPane.showInputDialog("Digite a data e hora de início do evento (DD/MM HH:MM): ");
+								String dataEHoraFim = JOptionPane.showInputDialog("Digite a data e hora de finalização do evento (DD/MM HH:MM): ");
+								float valorEvento = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor de entrada do evento: "));
+								Evento x = new Evento(nomeEvento, dataEHoraInicio, dataEHoraFim, valorEvento);
 								b.cadastrarEvento(x);
+								
 								cadastrarNovoEvento = JOptionPane.showConfirmDialog(null, "Cadastrar outro evento?", estacionamentoAddEvento, JOptionPane.YES_NO_OPTION);
 							
 							} while(cadastrarNovoEvento == JOptionPane.YES_OPTION);
@@ -182,11 +238,18 @@ public class Gerenciamento {
 							break;
 						
 						case 2: //Pesquisar Evento
-							String estacionamentoPesqEvento = JOptionPane.showInputDialog("Digite o nome do estacionamento");
-							Estacionamento c = pesquisarEstacionamento(estacionamentoPesqEvento);
-							String eventoPesq = JOptionPane.showInputDialog("Informe o nome do evento");
-							JOptionPane.showMessageDialog(null, c.pesquisarEvento(eventoPesq)); 
-						
+							String estacionamentoPesqEvento = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
+							pesquisarEstacionamento(estacionamentoPesqEvento);
+							Estacionamento v = pesquisarEstacionamento(estacionamentoPesqEvento);
+							
+							String nomeEvenPesq = JOptionPane.showInputDialog("Informe o nome do evento: ");
+							v.pesquisarAcesso(nomeEvenPesq);
+							Evento t = v.pesquisarEvento(nomeEvenPesq);
+							
+							String relatoEvento = "";
+							relatoEvento = t.relatorioEventos();
+							JOptionPane.showMessageDialog(null, relatoEvento);
+							
 							break;
 						
 						case 3: //Atualizar Evento
@@ -202,6 +265,19 @@ public class Gerenciamento {
 							Estacionamento e = pesquisarEstacionamento(estacionamentoDelEvento);
 							String eventoDel = JOptionPane.showInputDialog("Informe o nome do evento");
 							JOptionPane.showMessageDialog(null, e.deletarEvento(eventoDel));
+							
+							break;
+						
+						case 5: //Relatório dos Eventos
+							String estacionamentoRelEvento = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
+							Estacionamento k = pesquisarEstacionamento(estacionamentoRelEvento);
+							
+							String relatoEventosGeral = "";
+							for (int i = 0; i < k.getEventos().size(); i++) {
+								
+								relatoEventosGeral += k.getEventos().get(i).relatorioEventos() + "\n";
+							}
+							JOptionPane.showMessageDialog(null, relatoEventosGeral);
 							
 							break;
 				}
@@ -242,14 +318,14 @@ public class Gerenciamento {
 		String resposta = "";
 		for(Estacionamento a : estacionamentos) {
 			if(a.getNomeEstacionamento().equalsIgnoreCase(nome)) {
-				resposta = "Achou" + nome;
+				resposta = nome + " encontrado";
 				return a;
 			}
 			else {
-				resposta = "N�o achou";
+				resposta = "Estacionamento não encontrado";
 			}
 		}
-		resposta = "N�o achou";
+		resposta = "Nenhum estacionamento encontrado";
 		JOptionPane.showMessageDialog(null, resposta + " " + nome);
 		return null;
 	}
@@ -262,7 +338,7 @@ public class Gerenciamento {
 				 a.setCapVagas(Integer.parseInt(JOptionPane.showInputDialog("Digite a nova capacidade do Estacionamento: ")));
 				 a.setValorFrac(Float.parseFloat(JOptionPane.showInputDialog("Digite o novo valor de 15min do Estacionamento: ")));
 			     a.setValorHora(Float.parseFloat(JOptionPane.showInputDialog("Digite o novo valor de 1h do Estacionamento: ")));
-			     a.setValorDiurna(Float.parseFloat(JOptionPane.showInputDialog("Digite o novo valor da di�ria do Estacionamento: ")));
+			     a.setValorDiurna(Float.parseFloat(JOptionPane.showInputDialog("Digite o novo valor da diária do Estacionamento: ")));
 			     a.setValorNoturna(Float.parseFloat(JOptionPane.showInputDialog("Digite a nova porcentagem extra noturna do Estacionamento: ")));
 			     a.setValorMensalista(Float.parseFloat(JOptionPane.showInputDialog("Digite o novo valor da mensalidade do Estacionamento: ")));
 			     resposta = true;
