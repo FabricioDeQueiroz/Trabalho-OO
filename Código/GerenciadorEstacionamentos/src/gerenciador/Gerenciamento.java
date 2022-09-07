@@ -166,8 +166,6 @@ public class Gerenciamento {
 										b.cadastrarAcesso(ae);
 									}
 									else if (ehMensalista != 0 && ehEvento != 0) {
-										Estacionamento c = null;
-										c = b;
 										String DataEntrada = JOptionPane.showInputDialog("Digite a data e hora de entrada (formato dd/MM HH:mm)");
 								    	String DataSaida = JOptionPane.showInputDialog("Digite a data e hora de saida (formato dd/MM HH:mm)");
 								    	
@@ -184,27 +182,27 @@ public class Gerenciamento {
 											int frac = (int) (difMinutos / 15);
 											valorAcesso = frac * b.valorFrac;
 											AcessoPadrao ap = new AcessoPadrao(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
-											c.cadastrarAcesso(ap);
+											b.cadastrarAcesso(ap);
 										}
 										else if(difMinutos >= 60 && difMinutos <= 539) {
 											int hora = (int) (difMinutos / 60);
-											int fracHora = (int) (((difMinutos % 60) * 60) / 15);
-											
-											valorAcesso = ((hora * b.valorFrac) * (1 - (b.valorHora / 100))) + (fracHora * b.valorFrac);
+											int fracHora = (int) ((difMinutos % 60) / 15);
+											float desconto = 1 - (float) (b.valorHora/100);
+											valorAcesso = (((4*hora) * b.valorFrac) * desconto) + (fracHora * b.valorFrac);
 											
 											AcessoPadrao ap = new AcessoPadrao(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
-											c.cadastrarAcesso(ap);
+											b.cadastrarAcesso(ap);
 										}
 										else if(difMinutos >= 540 && Integer.parseInt(Entrada[2]) <= 17) {
 											valorAcesso = b.valorDiurna;
 											AcessoDiaria ad = new AcessoDiaria(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
-											c.cadastrarAcesso(ad);
+											b.cadastrarAcesso(ad);
 											
 										}
-										else if(difMinutos >= 540 && Integer.parseInt(Entrada[2]) >= 18 && Integer.parseInt(Entrada[2]) <= 05) {
+										else if(difMinutos >= 540 && Integer.parseInt(Entrada[2]) >= 18 && Integer.parseInt(Saida[2]) <= 05) {
 											valorAcesso = b.valorDiurna * ((b.valorNoturna / 100) + 1);
 											AcessoDiaria an = new AcessoDiaria(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
-											c.cadastrarAcesso(an);
+											b.cadastrarAcesso(an);
 										}
 									}
 								}
