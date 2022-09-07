@@ -52,7 +52,7 @@ public class Gerenciamento {
 							EstacionamentoNormal a = new EstacionamentoNormal(nomeEstacionamento, id, capVagas,
 							valorFrac, valorHora, valorDiurno, valorNoturno, valorMensal,  eh24Horas, horaAbre, horaFecha);
 							estacionamentos.add(a); //Estacionamento normal cadastrado
-							JOptionPane.showMessageDialog(null, "Cadastrado");
+							JOptionPane.showMessageDialog(null, "Estacionamento cadastrado");
 							}
 							
 							//Confirmação para loop de criação de novos estacionamentos
@@ -72,7 +72,7 @@ public class Gerenciamento {
 							
 							break;
 							
-							case 3: //Atualizar Estacionamento
+						case 3: //Atualizar Estacionamento
 							String nomeAtt = JOptionPane.showInputDialog("Informe o nome do estacionamento que deseja atualizar: ");
 							JOptionPane.showMessageDialog(null, atualizarEstacionamento(nomeAtt));
 							
