@@ -46,6 +46,7 @@ public abstract class Acesso{
 		resposta += "Acesso de placa: " + placa + "\n";
 		resposta += "Data e hora de entrada: " + dataEHoraEntrada + "\n";
 		resposta += "Data e hora de saída: " + dataEHoraSaida + "\n";
+		resposta += "Valor: " + valorAcesso + "\n";
 
 		return resposta;
 	}

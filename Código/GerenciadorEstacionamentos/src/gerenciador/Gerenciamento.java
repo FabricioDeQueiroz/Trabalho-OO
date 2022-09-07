@@ -1,5 +1,7 @@
 package gerenciador;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,9 +35,9 @@ public class Gerenciamento {
 							String nomeEstacionamento = JOptionPane.showInputDialog("Digite o nome do Estacionamento: ");
 							int capVagas = Integer.parseInt(JOptionPane.showInputDialog("Digite a capacidade do Estacionamento: "));
 							float valorFrac = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor de 15min do Estacionamento: "));
-							float valorHora = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor de 1h do Estacionamento: "));
+							float valorHora = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem de desconto a cada 1h (sem o simbolo %): "));
 							float valorDiurno = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor da diária do Estacionamento: "));
-							float valorNoturno = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem extra noturna do Estacionamento: "));
+							float valorNoturno = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem extra noturna do Estacionamento (sem o simbolo %): "));
 							float valorMensal = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor da mensalidade do Estacionamento: "));
 							int eh24Horas = JOptionPane.showConfirmDialog(null, "É 24 horas?", "Estacionamentos", JOptionPane.YES_NO_OPTION);
 							int id = estacionamentos.size() + 1;
@@ -113,11 +115,14 @@ public class Gerenciamento {
 							do {
 								String estacionamentoAddAcesso = JOptionPane.showInputDialog("Informe o nome do estacionamento: ");
 								Estacionamento b = pesquisarEstacionamento(estacionamentoAddAcesso);
+								
 								if (b.getTamanhoAcessos() != b.getCapVagas()) {
 									String placa = JOptionPane.showInputDialog("Digite a placa do veículo: ");
 									int ehMensalista = JOptionPane.showConfirmDialog(null, "Informe se o acesso é ou não mensalista");
 									
 									int ehEvento = 1;
+									
+									float valorAcesso = 0.0F;
 									
 									Evento x = null;
 									if (ehMensalista == 1) {
@@ -125,33 +130,82 @@ public class Gerenciamento {
 										if (ehEvento == 0) {
 											String nomeEventoInput = JOptionPane.showInputDialog("Informe o nome do evento: ");
 											x = b.pesquisarEvento(nomeEventoInput);
+											if(x == null) {
+												JOptionPane.showMessageDialog(null, "Evento não encontrado, considere criar um");
+												String estacionamentoAddEvento = JOptionPane.showInputDialog("Informe o nome do estacionamento em que deseja criar o evento: ");
+												Estacionamento l = pesquisarEstacionamento(estacionamentoAddEvento);
+												String nomeEvento = JOptionPane.showInputDialog("Digite o nome do evento: ");
+												String dataEHoraInicio = JOptionPane.showInputDialog("Digite a data e hora de início do evento (dd/MM HH:mm): ");
+												String dataEHoraFim = JOptionPane.showInputDialog("Digite a data e hora de finalização do evento (dd/MM HH:mm): ");
+												float valorEvento = Float.parseFloat(JOptionPane.showInputDialog("Digite o valor de entrada do evento: "));
+												Evento z = new Evento(nomeEvento, dataEHoraInicio, dataEHoraFim, valorEvento);
+												l.cadastrarEvento(z);
+												valorAcesso = z.valorEvento;
+											}
+											else if (x != null) {
+												valorAcesso = x.valorEvento;
+											}
 										}
 									}
 									
-									float valorAcesso = 0.0F;
-									
-									
-									float valorContratante = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem do contratante: "));
+									float valorContratante = Float.parseFloat(JOptionPane.showInputDialog("Digite a porcentagem do contratante (Não usar %): "));
 									
 									
 									if (ehMensalista == 0) {
 										valorAcesso = b.valorMensalista;
-										String dataEHoraEntrada = null;
-										String dataEHoraSaida = null;
+										String dataEHoraEntrada = JOptionPane.showInputDialog("Digite a data e hora de entrada (formato dd/MM HH:mm)");
+								    	String dataEHoraSaida = JOptionPane.showInputDialog("Digite a data e hora de saida (formato dd/MM HH:mm)");
+								    	
 										AcessoMensalista am = new AcessoMensalista(placa, dataEHoraEntrada, dataEHoraSaida, valorContratante, valorAcesso, b.valorMensalista);
 										b.cadastrarAcesso(am);
 									}
 									else if (ehEvento == 0) {
-										valorAcesso = x.valorEvento;
-										String dataEHoraEntrada = x.dataEHoraInicio;
-										String dataEHoraSaida = x.dataEHoraFim;
-										AcessoEvento ae = new AcessoEvento(placa, dataEHoraEntrada, dataEHoraSaida, valorContratante, valorAcesso, x.valorEvento);
+										String dataEHoraEntrada = JOptionPane.showInputDialog("Digite a data e hora de entrada no evento (formato dd/MM HH:mm)");
+								    	String dataEHoraSaida = JOptionPane.showInputDialog("Digite a data e hora de saida do evento (formato dd/MM HH:mm)");
+										AcessoEvento ae = new AcessoEvento(placa, dataEHoraEntrada, dataEHoraSaida, valorContratante, valorAcesso, valorAcesso);
 										b.cadastrarAcesso(ae);
 									}
-									else {
-										String dataEHoraEntrada = JOptionPane.showInputDialog("Digite a data e hora de entrada do veículo (formato DD/MM HH:MM): ");
-										String dataEHoraSaida = JOptionPane.showInputDialog("Digite a data e hora de saida do veículo (formato DD/MM HH:MM): ");
-										// lógica do cálculo de valor acesso das outras classes-filhas //
+									else if (ehMensalista != 0 && ehEvento != 0) {
+										Estacionamento c = null;
+										c = b;
+										String DataEntrada = JOptionPane.showInputDialog("Digite a data e hora de entrada (formato dd/MM HH:mm)");
+								    	String DataSaida = JOptionPane.showInputDialog("Digite a data e hora de saida (formato dd/MM HH:mm)");
+								    	
+								    	String[] Entrada = DataEntrada.trim().split("[,.!?'@_/:] *| +");
+								    	String[] Saida = DataSaida.trim().split("[,.!?'@_/:] *| +");
+								    	
+								    	LocalDateTime dataEntrada = LocalDateTime.of(2022, Integer.parseInt(Entrada[1]), Integer.parseInt(Entrada[0]), Integer.parseInt(Entrada[2]), Integer.parseInt(Entrada[3]));
+								    	LocalDateTime dataSaida = LocalDateTime.of(2022, Integer.parseInt(Saida[1]), Integer.parseInt(Saida[0]), Integer.parseInt(Saida[2]), Integer.parseInt(Saida[3]));
+								    	
+								    	Duration duracao = Duration.between(dataEntrada, dataSaida);
+										long difMinutos = duracao.toMinutes();
+										
+										if(difMinutos < 60) {
+											int frac = (int) (difMinutos / 15);
+											valorAcesso = frac * b.valorFrac;
+											AcessoPadrao ap = new AcessoPadrao(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
+											c.cadastrarAcesso(ap);
+										}
+										else if(difMinutos >= 60 && difMinutos <= 539) {
+											int hora = (int) (difMinutos / 60);
+											int fracHora = (int) (((difMinutos % 60) * 60) / 15);
+											
+											valorAcesso = ((hora * b.valorFrac) * (1 - (b.valorHora / 100))) + (fracHora * b.valorFrac);
+											
+											AcessoPadrao ap = new AcessoPadrao(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
+											c.cadastrarAcesso(ap);
+										}
+										else if(difMinutos >= 540 && Integer.parseInt(Entrada[2]) <= 17) {
+											valorAcesso = b.valorDiurna;
+											AcessoDiaria ad = new AcessoDiaria(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
+											c.cadastrarAcesso(ad);
+											
+										}
+										else if(difMinutos >= 540 && Integer.parseInt(Entrada[2]) >= 18 && Integer.parseInt(Entrada[2]) <= 05) {
+											valorAcesso = b.valorDiurna * ((b.valorNoturna / 100) + 1);
+											AcessoDiaria an = new AcessoDiaria(placa, DataEntrada, DataSaida, valorContratante, valorAcesso);
+											c.cadastrarAcesso(an);
+										}
 									}
 								}
 								else {
@@ -346,5 +400,6 @@ public class Gerenciamento {
 		}
 		return resposta;
 	}
+	
 
 }
