@@ -69,14 +69,16 @@ public abstract class Estacionamento {
 	}
 	
 	public String atualizarAcesso(String placa) {
-		String resposta;
+		String resposta = null;
 		for(Acesso a : getAcessos()) {
 			if(a.getPlaca().equalsIgnoreCase(placa)) {
 				 a.setDataEHoraSaida(JOptionPane.showInputDialog("Digite a nova data e hora de saída: "));
 				 resposta = "Acesso da placa " + placa + " atualizado";
 			}
+			else {
+				resposta = "Acesso da placa " + placa + " não encontrado";
+			}
 		}
-		resposta = "Acesso da placa " + placa + " não encontrado";
 		return resposta;
 
 	}
