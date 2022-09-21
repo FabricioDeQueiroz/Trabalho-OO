@@ -109,7 +109,6 @@ public class AlunoUnBView extends JFrame {
 				
 				AlunoUnBControl.enviarAluno(nome, matricula, curso, email);
 				JOptionPane.showMessageDialog(null, "Aluno cadastrado com sucesso");
-				
 			}
 		});
 		btn_cadastrar.setBounds(86, 232, 118, 23);
